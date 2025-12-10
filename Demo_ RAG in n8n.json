@@ -1,0 +1,426 @@
+{
+  "name": "Demo: RAG in n8n",
+  "nodes": [
+    {
+      "parameters": {
+        "model": "text-embedding-3-large",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        720,
+        576
+      ],
+      "id": "6ea78663-cf2f-4f2d-8e68-43047c2afd87",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "P80rvCNc31Gwo7kK",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        944,
+        -16
+      ],
+      "id": "579aed76-9644-42d1-ac13-7369059ff1c2",
+      "name": "AI Agent",
+      "notes": "You are a Retrieval-Augmented AI assistant. \nYou may only answer using information that comes from the database context provided to you.\nIf the context does not contain the answer, reply only with:\n“I don’t know based on the stored knowledge.”\n\nDo NOT create, guess, assume, or hallucinate any information.\nDo NOT use your own general knowledge.\nUse only the exact content retrieved from the vector database.\nQuote the relevant document when possible.\n"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        752,
+        -16
+      ],
+      "id": "9c30de61-935a-471f-ae88-ec5f67beeefc",
+      "name": "When chat message received",
+      "webhookId": "4091fa09-fb9a-4039-9411-7104d213f601"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        880,
+        208
+      ],
+      "id": "b5aa8942-9cd5-4c2f-bd77-7a0ceb921bac",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "P80rvCNc31Gwo7kK",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "### 🐕 2. Retriever Flow",
+        "height": 764,
+        "width": 1032,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        656,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "28bc73a1-e64a-47bf-ac1c-ffe644894ea5",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1120,
+        384
+      ],
+      "id": "e0929da5-a8bc-4ed9-b282-19c067300d6e",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "P80rvCNc31Gwo7kK",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableName": {
+          "__rl": true,
+          "value": "n8nTest",
+          "mode": "list",
+          "cachedResultName": "n8nTest"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        800,
+        400
+      ],
+      "id": "2491602f-3ff4-4dca-9a68-a53925a70f21",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "3cS8Xlra4KIrbGv8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chunkSize": 500,
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "id": "2573eb22-ea3e-4604-8495-24fd17493c90",
+      "name": "Recursive Character Text Splitter",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "position": [
+        176,
+        464
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "tableId": "n8nTest",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "question_lt",
+              "fieldValue": "=Kaip susitempti sumuštinį ? "
+            },
+            {
+              "fieldId": "metadata",
+              "fieldValue": "={\"category\":\"support\",\"type\":\"qa\"}"
+            },
+            {
+              "fieldId": "content",
+              "fieldValue": "Q: Kaip susitepti sumuštinį ? A: it is not normal that elephants can fly"
+            },
+            {
+              "fieldId": "answer_lt",
+              "fieldValue": " it is not normal that elephants can fly"
+            }
+          ]
+        }
+      },
+      "id": "8942cd39-1dfe-40eb-ae39-8ab489a9d831",
+      "name": "Create File record2",
+      "type": "n8n-nodes-base.supabase",
+      "position": [
+        -64,
+        80
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "supabaseApi": {
+          "id": "3cS8Xlra4KIrbGv8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $('Create File record2').item.json }}\n",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "=file_id",
+                "value": "={{ $('Create File record2').item.json.id }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "e165676c-bf9e-4617-b90b-80d3ffca7723",
+      "name": "Default Data Loader1",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "position": [
+        176,
+        288
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "model": "text-embedding-3-large",
+        "options": {}
+      },
+      "id": "8ab714a7-45d3-4a87-ae75-6cd2ed117ce7",
+      "name": "Embeddings OpenAI1",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "position": [
+        0,
+        272
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "openAiApi": {
+          "id": "P80rvCNc31Gwo7kK",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Embedding",
+        "height": 809.7437181509877,
+        "width": 951.7421645394404,
+        "color": 5
+      },
+      "id": "4b573223-5278-4c37-a2c6-5f43b8d0a572",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -320,
+        -96
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "name": "knowledge_base",
+        "description": "Retrieve data about user request",
+        "topK": 8
+      },
+      "id": "291c0fce-0c3b-4cd0-807b-8839a841958a",
+      "name": "Vector Store Tool1",
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "position": [
+        1008,
+        208
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "n8nTest",
+          "mode": "list",
+          "cachedResultName": "n8nTest"
+        },
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "id": "6fded209-e7d9-4c3a-a4b4-43ef9f0b6669",
+      "name": "Insert into Supabase Vectorstore1",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "position": [
+        112,
+        80
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "supabaseApi": {
+          "id": "3cS8Xlra4KIrbGv8",
+          "name": "Supabase account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Vector Store Tool1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Vector Store Tool1",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader1",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create File record2": {
+      "main": [
+        [
+          {
+            "node": "Insert into Supabase Vectorstore1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader1": {
+      "ai_document": [
+        [
+          {
+            "node": "Insert into Supabase Vectorstore1",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Insert into Supabase Vectorstore1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vector Store Tool1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "fc777aec-1f6a-4309-b942-069975294889",
+  "meta": {
+    "templateId": "rag-starter-template",
+    "templateCredsSetupCompleted": true,
+    "instanceId": "17b47dcbeac89a962d741f1135f6388210805f3a2c2688ad8b57fed12790e4d3"
+  },
+  "id": "4lH4v5SrJ4aSt9Ks",
+  "tags": []
+}
